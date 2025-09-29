@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Commerce | Register & Login</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8f9fa;
+    }
+
+    /* Top Navbar */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(45deg, #ff5722, #ff9800);
+      padding: 15px 30px;
+      color: white;
+    }
+    .navbar h1 {
+      margin: 0;
+    }
+    .navbar button {
+      background: white;
+      color: #ff5722;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    /* Form container */
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 70px);
+    }
+    .form-box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+    .form-box h2 {
+      margin-bottom: 20px;
+      text-align: center;
+      color: #ff5722;
+    }
+    .form-box input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .form-box button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: linear-gradient(45deg, #ff5722, #ff9800);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .form-box button:hover {
+      opacity: 0.9;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <h1>MyShop</h1>
+    <button onclick="showLogin()">Login</button>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Registration Form -->
+    <div class="form-box" id="registerBox">
+      <h2>Create Account</h2>
+      <input type="text" id="regName" placeholder="Full Name">
+      <input type="email" id="regEmail" placeholder="Email">
+      <input type="password" id="regPassword" placeholder="Password">
+      <input type="password" id="regConfirm" placeholder="Confirm Password">
+      <p class="error" id="regError"></p>
+      <button onclick="register()">Register</button>
+    </div>
+
+    <!-- Login Form (hidden at first) -->
+    <div class="form-box" id="loginBox" style="display:none;">
+      <h2>Login</h2>
+      <input type="email" id="loginEmail" placeholder="Email">
+      <input type="password" id="loginPassword" placeholder="Password">
+      <p class="error" id="loginError"></p>
+      <button onclick="login()">Login</button>
+    </div>
+  </div>
+
+  <script>
+    // Switch forms
+    function showLogin() {
+      document.getElementById("registerBox").style.display = "none";
+      document.getElementById("loginBox").style.display = "block";
+    }
+
+    function showRegister() {
+      document.getElementById("registerBox").style.display = "block";
+      document.getElementById("loginBox").style.display = "none";
+    }
+
+    // Register new user
+    function register() {
+      let name = document.getElementById("regName").value.trim();
+      let email = document.getElementById("regEmail").value.trim();
+      let password = document.getElementById("regPassword").value.trim();
+      let confirm = document.getElementById("regConfirm").value.trim();
+      let errorBox = document.getElementById("regError");
+
+      errorBox.textContent = "";
+
+      if (!name || !email || !password || !confirm) {
+        errorBox.textContent = "All fields are required!";
+        return;
+      }
+
+      // Email validation
+      let emailRegex = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!emailRegex.test(email)) {
+        errorBox.textContent = "Enter a valid email!";
+        return;
+      }
+
+      // Password validation
+      if (password.length < 6) {
+        errorBox.textContent = "Password must be at least 6 characters!";
+        return;
+      }
+
+      if (password !== confirm) {
+        errorBox.textContent = "Passwords do not match!";
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      let userExists = users.find(u => u.email === email);
+
+      if (userExists) {
+        errorBox.textContent = "User already exists!";
+        return;
+      }
+
+      users.push({ name, email, password });
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Registration successful! Please login.");
+      showLogin();
+    }
+
+    // Login existing user
+    function login() {
+      let email = document.getElementById("loginEmail").value.trim();
+      let password = document.getElementById("loginPassword").value.trim();
+      let errorBox = document.getElementById("loginError");
+
+      errorBox.textContent = "";
+
+      if (!email || !password) {
+        errorBox.textContent = "All fields are required!";
+        return;
+      }
+
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      let user = users.find(u => u.email === email && u.password === password);
+
+      if (!user) {
+        errorBox.textContent = "Invalid email or password!";
+        return;
+      }
+
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      window.location.href = "shop.html"; // redirect after login
+    }
+  </script>
+</body>
+</html>
