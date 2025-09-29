@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>MyShop — Checkout</title><link rel="stylesheet" href="style.css"/></head>
+<body>
+  <header class="topbar">
+    <div class="brand"><a href="shop.html" style="display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit"><div class="logo">MS</div><div class="site-brand">MyShop</div></a></div>
+    <div class="nav-actions">
+      <div class="lang-select"><select id="langCheckout"></select></div>
+      <a href="cart.html" class="btn ghost small">Cart</a>
+      <button id="logoutBtnCheckout" class="btn ghost small">Logout</button>
+      <button id="themeToggle" class="btn ghost small">Theme</button>
+    </div>
+  </header>
+
+  <main class="container center">
+    <div style="max-width:720px;width:100%">
+      <h1>Checkout</h1>
+      <div id="checkoutSummaryBox"></div>
+
+      <h3>Shipping Info</h3>
+      <form id="checkoutForm" class="card" style="display:flex;flex-direction:column;gap:8px">
+        <input id="shipName" placeholder="Full name" required/>
+        <input id="shipAddress" placeholder="Shipping address" required/>
+        <input id="shipPhone" placeholder="Phone number" required/>
+        <select id="payMethod">
+          <option value="card">Visa / Mastercard</option>
+          <option value="paypal">PayPal</option>
+          <option value="mpesa">M-Pesa</option>
+        </select>
+        <div style="display:flex;gap:8px">
+          <button id="confirmPurchaseBtn" class="btn primary">Confirm Purchase</button>
+          <a href="shop.html" class="btn ghost">Back to Shop</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer class="footer">&copy; <span id="yearCheckout"></span> MyShop</footer>
+
+  <script src="languages.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('yearCheckout').innerText = new Date().getFullYear();
+    initLangSelector('langCheckout');
+    ensureLoggedInThen(()=>{ renderCheckoutSummary(); });
+  </script>
+</body>
+</html>
