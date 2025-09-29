@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-Commerce | Register & Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyShop | Register & Login</title>
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: #f8f9fa;
     }
-
-    /* Top Navbar */
     .navbar {
       display: flex;
       justify-content: space-between;
@@ -32,8 +30,6 @@
       cursor: pointer;
       font-weight: bold;
     }
-
-    /* Form container */
     .container {
       display: flex;
       justify-content: center;
@@ -81,37 +77,32 @@
 </head>
 <body>
 
-  <!-- Navbar -->
   <div class="navbar">
     <h1>MyShop</h1>
     <button onclick="showLogin()">Login</button>
   </div>
 
-  <!-- Main Container -->
   <div class="container">
-    <!-- Registration Form -->
     <div class="form-box" id="registerBox">
       <h2>Create Account</h2>
-      <input type="text" id="regName" placeholder="Full Name">
-      <input type="email" id="regEmail" placeholder="Email">
-      <input type="password" id="regPassword" placeholder="Password">
-      <input type="password" id="regConfirm" placeholder="Confirm Password">
+      <input type="text" id="regName" placeholder="Full Name" />
+      <input type="email" id="regEmail" placeholder="Email" />
+      <input type="password" id="regPassword" placeholder="Password" />
+      <input type="password" id="regConfirm" placeholder="Confirm Password" />
       <p class="error" id="regError"></p>
       <button onclick="register()">Register</button>
     </div>
 
-    <!-- Login Form (hidden at first) -->
     <div class="form-box" id="loginBox" style="display:none;">
       <h2>Login</h2>
-      <input type="email" id="loginEmail" placeholder="Email">
-      <input type="password" id="loginPassword" placeholder="Password">
+      <input type="email" id="loginEmail" placeholder="Email" />
+      <input type="password" id="loginPassword" placeholder="Password" />
       <p class="error" id="loginError"></p>
       <button onclick="login()">Login</button>
     </div>
   </div>
 
   <script>
-    // Switch forms
     function showLogin() {
       document.getElementById("registerBox").style.display = "none";
       document.getElementById("loginBox").style.display = "block";
@@ -122,7 +113,6 @@
       document.getElementById("loginBox").style.display = "none";
     }
 
-    // Register new user
     function register() {
       let name = document.getElementById("regName").value.trim();
       let email = document.getElementById("regEmail").value.trim();
@@ -137,40 +127,25 @@
         return;
       }
 
-      // Email validation
-      let emailRegex = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
-      if (!emailRegex.test(email)) {
-        errorBox.textContent = "Enter a valid email!";
-        return;
-      }
-
-      // Password validation
-      if (password.length < 6) {
-        errorBox.textContent = "Password must be at least 6 characters!";
-        return;
-      }
-
       if (password !== confirm) {
         errorBox.textContent = "Passwords do not match!";
         return;
       }
 
-      let users = JSON.parse(localStorage.getItem("users")) || [];
-      let userExists = users.find(u => u.email === email);
-
-      if (userExists) {
-        errorBox.textContent = "User already exists!";
+      let emailRegex = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!emailRegex.test(email)) {
+        errorBox.textContent = "Invalid email format!";
         return;
       }
 
+      let users = JSON.parse(localStorage.getItem("myshop_users") || "[]");
       users.push({ name, email, password });
-      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("myshop_users", JSON.stringify(users));
+      localStorage.setItem("myshop_user", JSON.stringify({ name, email }));
 
-      alert("Registration successful! Please login.");
-      showLogin();
+      window.location.href = "shop.html";
     }
 
-    // Login existing user
     function login() {
       let email = document.getElementById("loginEmail").value.trim();
       let password = document.getElementById("loginPassword").value.trim();
@@ -179,21 +154,21 @@
       errorBox.textContent = "";
 
       if (!email || !password) {
-        errorBox.textContent = "All fields are required!";
+        errorBox.textContent = "Both fields are required!";
         return;
       }
 
-      let users = JSON.parse(localStorage.getItem("users")) || [];
+      let users = JSON.parse(localStorage.getItem("myshop_users") || "[]");
       let user = users.find(u => u.email === email && u.password === password);
 
-      if (!user) {
-        errorBox.textContent = "Invalid email or password!";
-        return;
+      if (user) {
+        localStorage.setItem("myshop_user", JSON.stringify(user));
+        window.location.href = "shop.html";
+      } else {
+        errorBox.textContent = "Invalid credentials!";
       }
-
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
-      window.location.href = "shop.html"; // redirect after login
     }
   </script>
 </body>
 </html>
+
