@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>MyShop — Cart</title><link rel="stylesheet" href="style.css"/></head>
+<body>
+  <header class="topbar">
+    <div class="brand"><a href="shop.html" style="display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit"><div class="logo">MS</div><div class="site-brand">MyShop</div></a></div>
+    <div class="nav-actions">
+      <div class="lang-select"><select id="langCart"></select></div>
+      <a href="shop.html" class="btn ghost small">Continue shopping</a>
+      <a href="wishlist.html" class="btn ghost small">Wishlist</a>
+      <button id="logoutBtnCart" class="btn ghost small">Logout</button>
+      <button id="themeToggle" class="btn ghost small">Theme</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Your Cart</h1>
+    <div id="cartContainer"></div>
+
+    <div id="cartSummary" class="card hidden" style="margin-top:12px">
+      <h3>Order Summary</h3>
+      <p>Items: <span id="summaryCount">0</span></p>
+      <p>Total: <strong id="summaryTotal">$0.00</strong></p>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <a id="proceedBtn" class="btn primary" href="checkout.html">Proceed to Checkout</a>
+        <button id="clearCartBtn" class="btn ghost">Clear Cart</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">&copy; <span id="yearCart"></span> MyShop</footer>
+
+  <script src="languages.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('yearCart').innerText = new Date().getFullYear();
+    initLangSelector('langCart');
+    ensureLoggedInThen(()=>{ renderCartPage(); });
+  </script>
+</body>
+</html>
